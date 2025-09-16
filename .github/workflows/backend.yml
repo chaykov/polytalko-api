@@ -28,30 +28,30 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-backend-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-buildx-backend-
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-buildx-
 
       # 4. Cache npm dependencies
       - name: Cache npm dependencies
         uses: actions/cache@v4
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-npm-backend-${{ hashFiles('backend/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-npm-backend-
+          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-npm-
 
       # 5. Extract metadata
       - name: Extract metadata
         id: meta
         run: |
-          echo "REPO_NAME=polytalko-backend" >> "$GITHUB_OUTPUT"
+          echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> "$GITHUB_OUTPUT"
           echo "SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
       # 6. Build dev Docker image
       - name: Build Docker image for tests
         uses: docker/build-push-action@v6
         with:
-          context: ./backend
-          file: ./backend/dev.Dockerfile
+          context: .
+          file: dev.Dockerfile
           tags: ${{ steps.meta.outputs.REPO_NAME }}-dev:latest
           load: true
           cache-from: type=local,src=/tmp/.buildx-cache
@@ -68,11 +68,11 @@ jobs:
       - name: Build and push production image
         uses: docker/build-push-action@v6
         with:
-          context: ./backend
-          file: ./backend/Dockerfile
+          context: .
+          file: Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/polytalko-backend:latest
-            ${{ secrets.DOCKER_USERNAME }}/polytalko-backend:${{ steps.meta.outputs.SHORT_SHA }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:latest
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:${{ steps.meta.outputs.SHORT_SHA }}
           cache-from: type=local,src=/tmp/.buildx-cache
