@@ -1,4 +1,4 @@
-import express from "express";
+import express, {Request, Response} from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import morgan from "morgan";
@@ -13,8 +13,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 
-app.get("/", (req, res) => {
-    res.send("Hello from backend!");
+app.get("/health", (req: Request, res: Response) => {
+    res.json({status: 'X'});
 });
 
 app.listen(PORT, () => {

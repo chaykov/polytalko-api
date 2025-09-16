@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
+    "moduleResolution": "node" ,
     "target": "ES2022",
     "module": "CommonJS",
     "strict": true,
@@ -10,7 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "resolveJsonModule": true,
-    "useUnknownInCatchVariables": false
+    "useUnknownInCatchVariables": false,
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules",
