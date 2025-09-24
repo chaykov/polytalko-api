@@ -1,17 +1,20 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "PolyTalko API as a backend",
-  "main": "dist/index.js",
+  "private": true,
   "scripts": {
-    "dev": "nodemon --watch src --exec ts-node src/index.ts",
+    "dev-test": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "dev": "nodemon --watch src --exec ts-node src/server.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/server.js",
+    "lint": "eslint . --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "migrate:generate:local": "dotenvx run -f .env.localhost -- drizzle-kit generate",
+    "migrate:generate:docker": "dotenvx run -f .env.docker -- drizzle-kit generate",
+    "migrate:local": "dotenvx run -f .env.localhost -- drizzle-kit migrate",
+    "migrate:docker": "dotenvx run -f .env.docker -- drizzle-kit migrate"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
     "@types/body-parser": "^1.19.6",
     "@types/cors": "^2.8.19",
@@ -19,15 +22,27 @@
     "@types/express": "^5.0.3",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.4.0",
+    "@types/pg": "^8.15.5",
+    "drizzle-kit": "^0.31.4",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.5",
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.44.1",
+    "@typescript-eslint/parser": "^8.44.1",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
+    "drizzle-orm": "^0.44.5",
+    "eslint-plugin-drizzle": "^0.2.3",
     "express": "^5.1.0",
-    "morgan": "^1.10.1"
+    "express-rate-limit": "^8.1.0",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.1",
+    "pg": "^8.16.3",
+    "pino": "^9.11.0",
+    "zod": "^4.1.11"
   }
 }

@@ -35,6 +35,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/compose.yaml" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/package.json" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/polytalko-api-kubernetes.yaml" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiProvider"><![CDATA[{
   "isMigrated": true
@@ -93,7 +94,7 @@
       <option name="presentableId" value="Default" />
       <updated>1757867490404</updated>
       <workItem from="1757867491522" duration="2149000" />
-      <workItem from="1758005311441" duration="3689000" />
+      <workItem from="1758005311441" duration="10694000" />
     </task>
     <servers />
   </component>

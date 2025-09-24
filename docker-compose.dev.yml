@@ -1,0 +1,65 @@
+# version: "3.9"
+# services:
+#   api:
+#     build:
+#       context: .
+#       dockerfile: dev.Dockerfile
+#     container_name: polytalko-api-dev
+#     env_file:
+#       - .env.dev
+#     ports:
+#       - "4000:4000"
+#     volumes:
+#       - .:/usr/src/app
+#       - /usr/src/app/node_modules
+#     depends_on:
+#       - postgres
+
+#   postgres:
+#     image: postgres:15-alpine
+#     container_name: polytalko-db-dev
+#     env_file:
+#       - .env.dev
+#     ports:
+#       - "5433:5432"
+#     volumes:
+#       - postgres_data_dev:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data_dev:
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - POSTGRES_USER=${POSTGRESDB_USER}
+      - POSTGRES_PASSWORD=${POSTGRESDB_ROOT_PASSWORD}
+      - POSTGRES_DB=${POSTGRESDB_DATABASE}
+    ports:
+      - ${POSTGRESDB_LOCAL_PORT}:${POSTGRESDB_DOCKER_PORT}
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  app:
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - ${NODE_LOCAL_PORT}:${NODE_DOCKER_PORT}
+    environment:
+      - DB_HOST=postgres
+      - DATABASE_URL=${DATABASE_URL}
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+volumes:
+  db:

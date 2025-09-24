@@ -29,7 +29,7 @@ spec:
           livenessProbe:
             httpGet:
               port: 4000
-              path: /health   # 👈 masz endpoint healthcheck
+              path: /health
             initialDelaySeconds: 5
             periodSeconds: 10
           readinessProbe:
@@ -51,4 +51,4 @@ spec:
   ports:
     - port: 4000
       targetPort: 4000
-      nodePort: 30002   # 👈 inny NodePort niż frontend (30001)
+      nodePort: 30002

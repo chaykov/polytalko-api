@@ -1,0 +1,58 @@
+# services:
+#   api:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: polytalko-api-prod
+#     restart: unless-stopped
+#     env_file:
+#       - .env.prod
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - postgres
+
+#   postgres:
+#     image: postgres:15-alpine
+#     container_name: polytalko-db-prod
+#     restart: unless-stopped
+#     env_file:
+#       - .env.prod
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - postgres_data_prod:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data_prod:
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - POSTGRES_USER=${POSTGRESDB_USER}
+      - POSTGRES_PASSWORD=${POSTGRESDB_ROOT_PASSWORD}
+      - POSTGRES_DB=${POSTGRESDB_DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  app:
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - "80:4000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - NODE_ENV=production
+
+volumes:
+  db:
